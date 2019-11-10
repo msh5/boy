@@ -9,6 +9,12 @@ Hello World !
 
 ## Installation
 
+```console
+env GO111MODULE=off go get -u github.com/msh5/boy
+```
+
+<!--
+
 ```shell
 # Install via Homebrew.
 brew tap msh5/boy
@@ -21,3 +27,5 @@ v0.0.1
 # Finally, register your GitHub credential.
 boy config --add gist.gh_access_token xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
+
+-->
