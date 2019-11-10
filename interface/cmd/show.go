@@ -33,8 +33,10 @@ var showCmd = &cobra.Command{
 		config := loadCommandConfig()
 
 		diContainer := dependency.NewCommandDIContainer(config.toDIContainerBuildParams())
+		cmdController := controller.NewCommandController(diContainer)
 
-		if err := controller.NewCommandController(diContainer).ShowSnippet(args); err != nil {
+		gistRef := args[0]
+		if err := cmdController.ShowSnippet(gistRef); err != nil {
 			log.Fatal(err)
 		}
 	},

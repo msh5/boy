@@ -33,8 +33,11 @@ var execCmd = &cobra.Command{
 		config := loadCommandConfig()
 
 		diContainer := dependency.NewCommandDIContainer(config.toDIContainerBuildParams())
+		cmdController := controller.NewCommandController(diContainer)
 
-		if err := controller.NewCommandController(diContainer).ExecuteSnippet(args); err != nil {
+		gistRef := args[0]
+		commentArgs := args[1:]
+		if err := cmdController.ExecuteSnippet(gistRef, commentArgs); err != nil {
 			log.Fatal(err)
 		}
 	},

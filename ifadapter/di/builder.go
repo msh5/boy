@@ -36,7 +36,7 @@ func (b *Builder) RegisterSnippetExecUsecase(usecase usecase.SnippetExecUsecase)
 
 func (b *Builder) RegisterSnippetShowUsecase(usecase usecase.SnippetShowUsecase) {
 	if err := b.Add(di.Def{
-		Name: snippetExecUsecaseDIObject,
+		Name: snippetShowUsecaseDIObject,
 		Build: func(ctn di.Container) (interface{}, error) {
 			return usecase, nil
 		},
