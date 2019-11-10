@@ -19,6 +19,13 @@ Hello World !
 
 ## Installation
 
+We distribute pre-built binaries for major CPUs and OSs,
+so it is good to download latest-version binary matched your system:
+
+* [Releases · msh5/boy](https://github.com/msh5/boy/releases)
+
+If you cannot find the binary matched with your system, please `go get` this repository:
+
 ```console
 env GO111MODULE=off go get -u github.com/msh5/boy
 ```
