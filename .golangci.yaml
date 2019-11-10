@@ -1,0 +1,18 @@
+run:
+  skip-files:
+    - interface/cmd/exec.go
+    - interface/cmd/root.go
+    - interface/cmd/show.go
+
+linters-settings:
+  goimports:
+    local-prefixes: github.com/msh5/boy
+
+linters:
+  presets:
+    - bugs
+    - complexity
+    - format
+    - performance
+    - style
+    - unused
