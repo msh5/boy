@@ -21,7 +21,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/msh5/boy/ifadapter/controller"
-	"github.com/msh5/boy/ifadapter/dependency"
+	"github.com/msh5/boy/interface/dependency"
 )
 
 // showCmd represents the show command

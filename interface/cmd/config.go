@@ -3,7 +3,7 @@ package cmd
 import (
 	"github.com/spf13/viper"
 
-	"github.com/msh5/boy/ifadapter/dependency"
+	"github.com/msh5/boy/interface/dependency"
 )
 
 type commandConfig struct {
