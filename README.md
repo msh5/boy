@@ -1,14 +1,19 @@
 <!-- markdownlint-disable MD033 -->
 <!-- markdownlint-disable MD041 -->
 
-<h1 align="center">Boy</h1>
-<div align="center">
- <strong>
-   On-Cloud Snippet Runner.
- </strong>
-</div>
+<h1 align="center">
+  Boy
+</h1>
 
-<br />
+<div align="center">
+  <strong>
+    On-Cloud Snippet Runner.
+  </strong>
+  <br />
+  <br />
+  <img src="https://github.com/msh5/boy/workflows/Build/badge.svg"> <!-- CI badge for Build workflow -->
+  <img src="https://github.com/msh5/boy/workflows/Release/badge.svg"> <!-- CI badge for Release workflow -->
+</div>
 
 ## Usage
 
