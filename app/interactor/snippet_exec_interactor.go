@@ -12,10 +12,10 @@ import (
 )
 
 type SnippetExecInteractor struct {
-	gistEntryRepository repository.GistEntryRepositoryInterface
+	gistEntryRepository repository.GistEntryRepository
 }
 
-func NewSnippetExecInteractor(repo repository.GistEntryRepositoryInterface) usecase.SnippetExecUsecase {
+func NewSnippetExecInteractor(repo repository.GistEntryRepository) usecase.SnippetExecUsecase {
 	return &SnippetExecInteractor{gistEntryRepository: repo}
 }
 

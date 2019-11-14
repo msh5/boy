@@ -9,10 +9,10 @@ import (
 )
 
 type SnippetShowInteractor struct {
-	gistEntryRepository repository.GistEntryRepositoryInterface
+	gistEntryRepository repository.GistEntryRepository
 }
 
-func NewSnippetShowInteractor(repo repository.GistEntryRepositoryInterface) usecase.SnippetShowUsecase {
+func NewSnippetShowInteractor(repo repository.GistEntryRepository) usecase.SnippetShowUsecase {
 	return &SnippetShowInteractor{gistEntryRepository: repo}
 }
 

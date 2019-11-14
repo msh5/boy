@@ -4,6 +4,6 @@ import (
 	"github.com/msh5/boy/domain/entity"
 )
 
-type GistEntryRepositoryInterface interface {
+type GistEntryRepository interface {
 	Load(handle entity.GistHandle) (*entity.GistEntry, error)
 }

@@ -7,17 +7,17 @@ import (
 	"github.com/msh5/boy/interface/driver"
 )
 
-type GistEntryRepository struct {
+type GistEntryPersistence struct {
 	client *driver.GitHubClient
 }
 
-func NewGistEntryRepository(accessToken string) *GistEntryRepository {
-	return &GistEntryRepository{
+func NewGistEntryPersistence(accessToken string) *GistEntryPersistence {
+	return &GistEntryPersistence{
 		client: driver.NewGitHubClient(accessToken),
 	}
 }
 
-func (r *GistEntryRepository) Load(handle entity.GistHandle) (*entity.GistEntry, error) {
+func (r *GistEntryPersistence) Load(handle entity.GistHandle) (*entity.GistEntry, error) {
 	q, err := r.client.QueryUserGist(context.Background(), handle.UserID, handle.GistEntryName)
 	if err != nil {
 		return nil, err

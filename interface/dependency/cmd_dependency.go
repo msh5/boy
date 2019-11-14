@@ -13,7 +13,7 @@ type CommandDIContainerBuildParameters struct {
 func NewCommandDIContainer(params CommandDIContainerBuildParameters) di.Container {
 	diBuilder := di.NewBuilder()
 
-	gistEntryRepository := persistence.NewGistEntryRepository(params.GitHubAccessToken)
+	gistEntryRepository := persistence.NewGistEntryPersistence(params.GitHubAccessToken)
 
 	diBuilder.RegisterSnippetExecUsecase(
 		interactor.NewSnippetExecInteractor(gistEntryRepository),
