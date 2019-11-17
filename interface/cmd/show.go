@@ -20,7 +20,6 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/msh5/boy/ifadapter/controller"
 	"github.com/msh5/boy/interface/dependency"
 )
 
@@ -32,13 +31,14 @@ var showCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		config := loadCommandConfig()
 
-		diContainer := dependency.NewCommandDIContainer(config.toDIContainerBuildParams())
-		cmdController := controller.NewCommandController(diContainer)
+		dependencies := dependency.NewCLIDependencies(config.toDIContainerBuildParams())
 
-		gistRef := args[0]
-		if err := cmdController.ShowSnippet(gistRef); err != nil {
+		ref := args[0]
+		if err := dependencies.ShowController.Handle(ref); err != nil {
 			log.Fatal(err)
 		}
+
+		dependencies.ShowView.Update()
 	},
 }
 

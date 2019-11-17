@@ -3,24 +3,28 @@ package interactor
 import (
 	"fmt"
 
+	"github.com/msh5/boy/app/presenter"
 	"github.com/msh5/boy/app/repository"
 	"github.com/msh5/boy/app/usecase"
-	"github.com/msh5/boy/domain/entity"
 )
 
 type SnippetShowInteractor struct {
 	gistEntryRepository repository.GistEntryRepository
+	showPresenter       presenter.ShowPresenter
 }
 
-func NewSnippetShowInteractor(repo repository.GistEntryRepository) usecase.SnippetShowUsecase {
-	return &SnippetShowInteractor{gistEntryRepository: repo}
+func NewSnippetShowInteractor(
+	gistEntryRepository repository.GistEntryRepository,
+	showPresenter presenter.ShowPresenter,
+) usecase.SnippetShowUsecase {
+	return &SnippetShowInteractor{
+		gistEntryRepository: gistEntryRepository,
+		showPresenter:       showPresenter,
+	}
 }
 
 func (i *SnippetShowInteractor) Run(params usecase.SnippetShowParameters) error {
-	gistEntry, err := i.gistEntryRepository.Load(entity.GistHandle{
-		UserID:        params.UserID,
-		GistEntryName: params.GistEntryName,
-	})
+	gistEntry, err := i.gistEntryRepository.Load(params.UserID, params.GistEntryName)
 	if err != nil {
 		return err
 	}
@@ -29,7 +33,8 @@ func (i *SnippetShowInteractor) Run(params usecase.SnippetShowParameters) error 
 		return fmt.Errorf("no files in gist entry")
 	}
 
-	fmt.Printf("%s\n", gistEntry.Files[0].Text)
+	result := presenter.ShowResult{Text: gistEntry.Files[0].Text}
+	i.showPresenter.Present(result)
 
 	return nil
 }

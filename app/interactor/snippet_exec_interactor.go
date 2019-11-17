@@ -2,28 +2,29 @@ package interactor
 
 import (
 	"fmt"
-	"io/ioutil"
-	"os"
-	"os/exec"
 
+	"github.com/msh5/boy/app/presenter"
 	"github.com/msh5/boy/app/repository"
 	"github.com/msh5/boy/app/usecase"
-	"github.com/msh5/boy/domain/entity"
 )
 
 type SnippetExecInteractor struct {
 	gistEntryRepository repository.GistEntryRepository
+	execPresenter       presenter.ExecPresenter
 }
 
-func NewSnippetExecInteractor(repo repository.GistEntryRepository) usecase.SnippetExecUsecase {
-	return &SnippetExecInteractor{gistEntryRepository: repo}
+func NewSnippetExecInteractor(
+	gistEntryRepository repository.GistEntryRepository,
+	execPresenter presenter.ExecPresenter,
+) usecase.SnippetExecUsecase {
+	return &SnippetExecInteractor{
+		gistEntryRepository: gistEntryRepository,
+		execPresenter:       execPresenter,
+	}
 }
 
 func (i *SnippetExecInteractor) Run(params usecase.SnippetExecParameters) error {
-	gistEntry, err := i.gistEntryRepository.Load(entity.GistHandle{
-		UserID:        params.UserID,
-		GistEntryName: params.GistEntryName,
-	})
+	gistEntry, err := i.gistEntryRepository.Load(params.UserID, params.GistEntryName)
 	if err != nil {
 		return err
 	}
@@ -32,38 +33,13 @@ func (i *SnippetExecInteractor) Run(params usecase.SnippetExecParameters) error 
 		return fmt.Errorf("no files in gist entry")
 	}
 
-	tempFile, err := writeToTempFile([]byte(gistEntry.Files[0].Text))
+	exitStatus, err := runBytesAsCommand([]byte(gistEntry.Files[0].Text), params.CommandArgs)
 	if err != nil {
 		return err
 	}
 
-	defer os.Remove(tempFile.Name())
+	result := presenter.ExecResult{ExitStatus: exitStatus}
+	i.execPresenter.Present(result)
 
-	if err := os.Chmod(tempFile.Name(), 0755); err != nil {
-		return err
-	}
-
-	command := exec.Command(tempFile.Name(), params.CommandArgs...) //nolint:gosec
-	command.Stdout = os.Stdout
-	command.Stderr = os.Stderr
-
-	return command.Run()
-}
-
-func writeToTempFile(b []byte) (*os.File, error) {
-	tempFile, err := ioutil.TempFile(os.TempDir(), "boy_*")
-	if err != nil {
-		return nil, err
-	}
-
-	_, err = tempFile.Write(b)
-
-	tempFile.Close()
-
-	if err != nil {
-		os.Remove(tempFile.Name())
-		return nil, err
-	}
-
-	return tempFile, nil
+	return nil
 }

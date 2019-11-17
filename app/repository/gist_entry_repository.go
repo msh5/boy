@@ -5,5 +5,5 @@ import (
 )
 
 type GistEntryRepository interface {
-	Load(handle entity.GistHandle) (*entity.GistEntry, error)
+	Load(userID string, gistEntryName string) (*entity.GistEntry, error)
 }

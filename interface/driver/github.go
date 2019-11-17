@@ -21,28 +21,55 @@ func NewGitHubClient(accessToken string) *GitHubClient {
 	}
 }
 
-type UserGistQuery struct {
+type UserGistFiles struct {
 	User struct {
 		Gist struct {
 			Files []struct {
 				Name string
 				Text string
 			}
-		} `graphql:"gist(name: $name)"`
-	} `graphql:"user(login: $user)"`
+		} `graphql:"gist(name: $gist_name)"`
+	} `graphql:"user(login: $user_id)"`
 }
 
-func (c *GitHubClient) QueryUserGist(ctx context.Context, userID string, gistName string) (*UserGistQuery, error) {
-	var q UserGistQuery
+func (c *GitHubClient) QueryGistFiles(ctx context.Context, userID string, gistName string) (*UserGistFiles, error) {
+	var obj UserGistFiles
 
 	variables := map[string]interface{}{
-		"user": githubv4.String(userID),
-		"name": githubv4.String(gistName),
+		"user_id":   githubv4.String(userID),
+		"gist_name": githubv4.String(gistName),
 	}
 
-	if err := c.client.Query(ctx, &q, variables); err != nil {
+	if err := c.client.Query(ctx, &obj, variables); err != nil {
 		return nil, err
 	}
 
-	return &q, nil
+	return &obj, nil
+}
+
+type RepositoryBlob struct {
+	Repository struct {
+		Object struct {
+			Blob struct {
+				Text string
+			} `graphql:"... on Blob"`
+		} `graphql:"object(expression: $object_expr)"`
+	} `graphql:"repository(owner: $repo_owner, name: $repo_name)"`
+}
+
+func (c *GitHubClient) QueryRepositoryBlob(ctx context.Context, repoOwner string, repoName string, path string) (
+	*RepositoryBlob, error) {
+	var obj RepositoryBlob
+
+	variables := map[string]interface{}{
+		"repo_owner":  githubv4.String(repoOwner),
+		"repo_name":   githubv4.String(repoName),
+		"object_expr": githubv4.String("HEAD:" + path),
+	}
+
+	if err := c.client.Query(ctx, &obj, variables); err != nil {
+		return nil, err
+	}
+
+	return &obj, nil
 }

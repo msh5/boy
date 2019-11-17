@@ -17,14 +17,14 @@ func NewGistEntryPersistence(accessToken string) *GistEntryPersistence {
 	}
 }
 
-func (r *GistEntryPersistence) Load(handle entity.GistHandle) (*entity.GistEntry, error) {
-	q, err := r.client.QueryUserGist(context.Background(), handle.UserID, handle.GistEntryName)
+func (r *GistEntryPersistence) Load(userID string, gistEntryName string) (*entity.GistEntry, error) {
+	obj, err := r.client.QueryGistFiles(context.Background(), userID, gistEntryName)
 	if err != nil {
 		return nil, err
 	}
 
 	var entry entity.GistEntry
-	for _, file := range q.User.Gist.Files {
+	for _, file := range obj.User.Gist.Files {
 		entry.Files = append(entry.Files, entity.GistFile{Name: file.Name, Text: file.Text})
 	}
 
