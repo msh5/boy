@@ -44,3 +44,27 @@ func (b *Builder) RegisterSnippetShowUsecase(usecase usecase.SnippetShowUsecase)
 		panic(err)
 	}
 }
+
+func (b *Builder) RegisterBlobExecUsecase(usecase usecase.BlobExecUsecase) {
+	err := b.Add(di.Def{
+		Name: blobExecUsecaseDIObject,
+		Build: func(ctn di.Container) (interface{}, error) {
+			return usecase, nil
+		},
+	})
+	if err != nil {
+		panic(err)
+	}
+}
+
+func (b *Builder) RegisterBlobShowUsecase(usecase usecase.BlobShowUsecase) {
+	err := b.Add(di.Def{
+		Name: blobShowUsecaseDIObject,
+		Build: func(ctn di.Container) (interface{}, error) {
+			return usecase, nil
+		},
+	})
+	if err != nil {
+		panic(err)
+	}
+}

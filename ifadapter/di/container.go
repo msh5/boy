@@ -15,7 +15,7 @@ func (c *Container) GetSnippetExecUsecase() usecase.SnippetExecUsecase {
 
 	usecase, ok := objectInterface.(usecase.SnippetExecUsecase)
 	if !ok {
-		panic("Cannot cast to SnippetExecUsecase")
+		panic("cannot cast to SnippetExecUsecase")
 	}
 
 	return usecase
@@ -26,7 +26,29 @@ func (c *Container) GetSnippetShowUsecase() usecase.SnippetShowUsecase {
 
 	usecase, ok := objectInterface.(usecase.SnippetShowUsecase)
 	if !ok {
-		panic("Cannot cast to SnippetShowUsecase")
+		panic("cannot cast to SnippetShowUsecase")
+	}
+
+	return usecase
+}
+
+func (c *Container) GetBlobExecUsecase() usecase.BlobExecUsecase {
+	objectInterface := c.Get(blobExecUsecaseDIObject)
+
+	usecase, ok := objectInterface.(usecase.BlobExecUsecase)
+	if !ok {
+		panic("cannot cast to BlobExecUsecase")
+	}
+
+	return usecase
+}
+
+func (c *Container) GetBlobShowUsecase() usecase.BlobShowUsecase {
+	objectInterface := c.Get(blobShowUsecaseDIObject)
+
+	usecase, ok := objectInterface.(usecase.BlobShowUsecase)
+	if !ok {
+		panic("cannot cast to BlobShowUsecase")
 	}
 
 	return usecase
