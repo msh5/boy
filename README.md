@@ -20,6 +20,9 @@
 ```console
 $ boy exec gist.github.com/msh5/965b29269fee385ee2a082101f247a26
 Hello World !
+
+$ boy exec github.com/msh5/boy/share/hello_world.sh
+Hello World !
 ```
 
 ## Installation
