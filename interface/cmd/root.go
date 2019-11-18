@@ -31,10 +31,13 @@ var cfgFile string
 var rootCmd = &cobra.Command{
 	Use:   "boy",
 	Short: "On-cloud snippet runner",
-	Long:  `TODO`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	//	Run: func(cmd *cobra.Command, args []string) { },
+}
+
+func SetVersion(version string) {
+	rootCmd.Version = version
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
