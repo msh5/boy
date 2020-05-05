@@ -5,11 +5,16 @@ import (
 
 	"github.com/msh5/boy/domain/entity"
 	"github.com/msh5/boy/interface/driver"
-	"golang.org/x/xerrors"
 )
 
 type GistEntryPersistence struct {
 	client *driver.GitHubClient
+}
+
+type gistError struct{}
+
+func (e *gistError) Error() string {
+	return "no files in gist entry"
 }
 
 func NewGistEntryPersistence(accessToken string) *GistEntryPersistence {
@@ -25,7 +30,7 @@ func (r *GistEntryPersistence) Load(userID string, gistEntryName string) (*entit
 	}
 
 	if len(obj.User.Gist.Files) == 0 {
-		return nil, xerrors.Errorf("Gist Load Error: no files in gist entry")
+		return nil, &gistError{}
 	}
 
 	var entry entity.GistEntry

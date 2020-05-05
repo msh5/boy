@@ -3,7 +3,6 @@ package controller
 import (
 	"github.com/msh5/boy/app/usecase"
 	"github.com/msh5/boy/ifadapter/di"
-	"golang.org/x/xerrors"
 )
 
 type ExecController struct {
@@ -12,6 +11,12 @@ type ExecController struct {
 
 func NewExecController(diContainer di.Container) *ExecController {
 	return &ExecController{diContainer: diContainer}
+}
+
+type execHandleError struct{}
+
+func (e *execHandleError) Error() string {
+	return "unknown reference type"
 }
 
 func (c *ExecController) Handle(ref string, commandArgs []string) error {
@@ -23,7 +28,7 @@ func (c *ExecController) Handle(ref string, commandArgs []string) error {
 	case gitHubBlobReferenceType:
 		return c.executeBlobSnippet(ref, commandArgs)
 	default:
-		return xerrors.Errorf("reference is unexpected syntax")
+		return &execHandleError{}
 	}
 }
 

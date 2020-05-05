@@ -2,8 +2,6 @@ package controller
 
 import (
 	"strings"
-
-	"golang.org/x/xerrors"
 )
 
 type referenceType int
@@ -33,11 +31,17 @@ type gistFileReference struct {
 	GistName string
 }
 
+type urlSegmentError struct{}
+
+func (e *urlSegmentError) Error() string {
+	return "reference is unexpected syntax"
+}
+
 func parseGistFileReference(ref string) (*gistFileReference, error) {
 	segments := strings.Split(ref, "/")
 
 	if len(segments) != gistURLSegmentCount {
-		return nil, xerrors.Errorf("reference is unexpected syntax")
+		return nil, &urlSegmentError{}
 	}
 
 	refObj := gistFileReference{
@@ -58,8 +62,9 @@ func parseGitHubBlobReference(ref string) (*gitHubBlobReference, error) {
 	segments := strings.SplitN(ref, "/", 4)
 
 	if len(segments) != gitHubRLSegmentCount {
+		//return nil, xerrors.Errorf("reference is unexpected syntax")
 		//return nil, errors.New("reference is unexpected syntax")
-		return nil, xerrors.Errorf("reference is unexpected syntax")
+		return nil, &urlSegmentError{}
 	}
 
 	refObj := gitHubBlobReference{
