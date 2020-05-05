@@ -15,11 +15,11 @@ func NewExecController(diContainer di.Container) *ExecController {
 	return &ExecController{diContainer: diContainer}
 }
 
-type execHandleError struct {
+type execUnknownReferenceTypeError struct {
 	msg string
 }
 
-func (e *execHandleError) Error() string {
+func (e *execUnknownReferenceTypeError) Error() string {
 	return fmt.Sprintf("err: %s", e.msg)
 }
 
@@ -32,7 +32,7 @@ func (c *ExecController) Handle(ref string, commandArgs []string) error {
 	case gitHubBlobReferenceType:
 		return c.executeBlobSnippet(ref, commandArgs)
 	default:
-		return &execHandleError{msg: "unknown reference type"}
+		return &execUnknownReferenceTypeError{msg: "unknown reference type"}
 	}
 }
 

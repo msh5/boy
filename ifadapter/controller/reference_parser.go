@@ -32,19 +32,19 @@ type gistFileReference struct {
 	GistName string
 }
 
-type urlSegmentError struct {
+type unexpectedReferenceError struct {
 	msg string
 }
 
-func (e *urlSegmentError) Error() string {
-	return fmt.Sprintf("err: %s", e.msg)
+func (e *unexpectedReferenceError) Error() string {
+	return fmt.Sprintf("error: %s", e.msg)
 }
 
 func parseGistFileReference(ref string) (*gistFileReference, error) {
 	segments := strings.Split(ref, "/")
 
 	if len(segments) != gistURLSegmentCount {
-		return nil, &urlSegmentError{msg: "reference is unexpected syntax"}
+		return nil, &unexpectedReferenceError{msg: "reference is unexpected syntax"}
 	}
 
 	refObj := gistFileReference{
@@ -65,7 +65,7 @@ func parseGitHubBlobReference(ref string) (*gitHubBlobReference, error) {
 	segments := strings.SplitN(ref, "/", 4)
 
 	if len(segments) != gitHubRLSegmentCount {
-		return nil, &urlSegmentError{msg: "reference is unexpected syntax"}
+		return nil, &unexpectedReferenceError{msg: "reference is unexpected syntax"}
 	}
 
 	refObj := gitHubBlobReference{

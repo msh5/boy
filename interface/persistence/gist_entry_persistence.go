@@ -2,7 +2,6 @@ package persistence
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/msh5/boy/domain/entity"
 	"github.com/msh5/boy/interface/driver"
@@ -10,14 +9,6 @@ import (
 
 type GistEntryPersistence struct {
 	client *driver.GitHubClient
-}
-
-type gistError struct {
-	msg string
-}
-
-func (e *gistError) Error() string {
-	return fmt.Sprintf("err: %s", e.msg)
 }
 
 func NewGistEntryPersistence(accessToken string) *GistEntryPersistence {
@@ -30,10 +21,6 @@ func (r *GistEntryPersistence) Load(userID string, gistEntryName string) (*entit
 	obj, err := r.client.QueryGistFiles(context.Background(), userID, gistEntryName)
 	if err != nil {
 		return nil, err
-	}
-
-	if len(obj.User.Gist.Files) == 0 {
-		return nil, &gistError{msg: "no files in gist entry"}
 	}
 
 	var entry entity.GistEntry

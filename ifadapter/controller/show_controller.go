@@ -15,11 +15,11 @@ func NewShowController(diContainer di.Container) *ShowController {
 	return &ShowController{diContainer: diContainer}
 }
 
-type showHandleError struct {
+type showUnknownReferenceTypeError struct {
 	msg string
 }
 
-func (e *showHandleError) Error() string {
+func (e *showUnknownReferenceTypeError) Error() string {
 	return fmt.Sprintf("err: %s", e.msg)
 }
 
@@ -32,7 +32,7 @@ func (c *ShowController) Handle(ref string) error {
 	case gitHubBlobReferenceType:
 		return c.showBlobSnippet(ref)
 	default:
-		return &showHandleError{msg: "unknown reference type"}
+		return &showUnknownReferenceTypeError{msg: "unknown reference type"}
 	}
 }
 
