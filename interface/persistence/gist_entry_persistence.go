@@ -17,7 +17,6 @@ type gistError struct {
 }
 
 func (e *gistError) Error() string {
-	//return "no files in gist entry"
 	return fmt.Sprintf("err: %s", e.msg)
 }
 
