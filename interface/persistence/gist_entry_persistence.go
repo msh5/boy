@@ -5,6 +5,7 @@ import (
 
 	"github.com/msh5/boy/domain/entity"
 	"github.com/msh5/boy/interface/driver"
+	"golang.org/x/xerrors"
 )
 
 type GistEntryPersistence struct {
@@ -21,6 +22,10 @@ func (r *GistEntryPersistence) Load(userID string, gistEntryName string) (*entit
 	obj, err := r.client.QueryGistFiles(context.Background(), userID, gistEntryName)
 	if err != nil {
 		return nil, err
+	}
+
+	if len(obj.User.Gist.Files) == 0 {
+		return nil, xerrors.Errorf("Gist Load Error: no files in gist entry")
 	}
 
 	var entry entity.GistEntry

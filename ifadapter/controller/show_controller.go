@@ -1,10 +1,9 @@
 package controller
 
 import (
-	"errors"
-
 	"github.com/msh5/boy/app/usecase"
 	"github.com/msh5/boy/ifadapter/di"
+	"golang.org/x/xerrors"
 )
 
 type ShowController struct {
@@ -24,7 +23,7 @@ func (c *ShowController) Handle(ref string) error {
 	case gitHubBlobReferenceType:
 		return c.showBlobSnippet(ref)
 	default:
-		return errors.New("unknown reference type")
+		return xerrors.Errorf("reference is unexpected syntax")
 	}
 }
 
