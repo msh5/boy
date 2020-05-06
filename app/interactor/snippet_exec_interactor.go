@@ -1,8 +1,6 @@
 package interactor
 
 import (
-	"fmt"
-
 	"github.com/msh5/boy/app/presenter"
 	"github.com/msh5/boy/app/repository"
 	"github.com/msh5/boy/app/usecase"
@@ -23,14 +21,6 @@ func NewSnippetExecInteractor(
 	}
 }
 
-type execNoFileError struct {
-	msg string
-}
-
-func (e *execNoFileError) Error() string {
-	return fmt.Sprintf("error: %s", e.msg)
-}
-
 func (i *SnippetExecInteractor) Run(params usecase.SnippetExecParameters) error {
 	gistEntry, err := i.gistEntryRepository.Load(params.UserID, params.GistEntryName)
 	if err != nil {
@@ -38,7 +28,7 @@ func (i *SnippetExecInteractor) Run(params usecase.SnippetExecParameters) error 
 	}
 
 	if len(gistEntry.Files) == 0 {
-		return &execNoFileError{msg: "no files in gist entry"}
+		return &noFileError{}
 	}
 
 	exitStatus, err := runBytesAsCommand([]byte(gistEntry.Files[0].Text), params.CommandArgs)

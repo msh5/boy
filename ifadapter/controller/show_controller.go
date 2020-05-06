@@ -1,8 +1,6 @@
 package controller
 
 import (
-	"fmt"
-
 	"github.com/msh5/boy/app/usecase"
 	"github.com/msh5/boy/ifadapter/di"
 )
@@ -15,14 +13,6 @@ func NewShowController(diContainer di.Container) *ShowController {
 	return &ShowController{diContainer: diContainer}
 }
 
-type showUnknownReferenceTypeError struct {
-	msg string
-}
-
-func (e *showUnknownReferenceTypeError) Error() string {
-	return fmt.Sprintf("err: %s", e.msg)
-}
-
 func (c *ShowController) Handle(ref string) error {
 	refType := detectReferenceType(ref)
 
@@ -32,7 +22,7 @@ func (c *ShowController) Handle(ref string) error {
 	case gitHubBlobReferenceType:
 		return c.showBlobSnippet(ref)
 	default:
-		return &showUnknownReferenceTypeError{msg: "unknown reference type"}
+		return &unKnownReferenceTypeError{}
 	}
 }
 

@@ -1,8 +1,6 @@
 package controller
 
 import (
-	"fmt"
-
 	"github.com/msh5/boy/app/usecase"
 	"github.com/msh5/boy/ifadapter/di"
 )
@@ -15,14 +13,6 @@ func NewExecController(diContainer di.Container) *ExecController {
 	return &ExecController{diContainer: diContainer}
 }
 
-type execUnknownReferenceTypeError struct {
-	msg string
-}
-
-func (e *execUnknownReferenceTypeError) Error() string {
-	return fmt.Sprintf("err: %s", e.msg)
-}
-
 func (c *ExecController) Handle(ref string, commandArgs []string) error {
 	refType := detectReferenceType(ref)
 
@@ -32,7 +22,7 @@ func (c *ExecController) Handle(ref string, commandArgs []string) error {
 	case gitHubBlobReferenceType:
 		return c.executeBlobSnippet(ref, commandArgs)
 	default:
-		return &execUnknownReferenceTypeError{msg: "unknown reference type"}
+		return &unKnownReferenceTypeError{}
 	}
 }
 
