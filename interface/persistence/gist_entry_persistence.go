@@ -11,9 +11,9 @@ type GistEntryPersistence struct {
 	client *driver.GitHubClient
 }
 
-func NewGistEntryPersistence(accessToken string) *GistEntryPersistence {
+func NewGistEntryPersistence(accessToken, ref string) *GistEntryPersistence {
 	return &GistEntryPersistence{
-		client: driver.NewGitHubClient(accessToken),
+		client: driver.NewGitHubClient(accessToken, ref),
 	}
 }
 

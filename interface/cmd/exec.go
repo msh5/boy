@@ -31,9 +31,11 @@ var execCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		config := loadCommandConfig()
 
-		dependencies := dependency.NewCLIDependencies(config.toDIContainerBuildParams())
-
 		ref := args[0]
+    params := config.toDIContainerBuildParams()
+    params.Ref = ref
+		dependencies := dependency.NewCLIDependencies(params)
+
 		commentArgs := args[1:]
 		if err := dependencies.ExecController.Handle(ref, commentArgs); err != nil {
 			log.Fatal(err)

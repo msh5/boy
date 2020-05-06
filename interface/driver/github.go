@@ -2,6 +2,7 @@ package driver
 
 import (
 	"context"
+	"strings"
 
 	"github.com/shurcooL/githubv4"
 	"golang.org/x/oauth2"
@@ -11,13 +12,19 @@ type GitHubClient struct {
 	client *githubv4.Client
 }
 
-func NewGitHubClient(accessToken string) *GitHubClient {
+func NewGitHubClient(accessToken, ref string) *GitHubClient {
 	httpClient := oauth2.NewClient(context.Background(), oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: accessToken},
 	))
 
+	if strings.HasPrefix(ref, "gist.github.com") || strings.HasPrefix(ref, "github.com") {
+		return &GitHubClient{
+			client: githubv4.NewClient(httpClient),
+		}
+	}
+	// GitHub Enterprise
 	return &GitHubClient{
-		client: githubv4.NewClient(httpClient),
+		client: githubv4.NewEnterpriseClient(ref, httpClient),
 	}
 }
 
