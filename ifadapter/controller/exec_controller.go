@@ -1,8 +1,6 @@
 package controller
 
 import (
-	"errors"
-
 	"github.com/msh5/boy/app/usecase"
 	"github.com/msh5/boy/ifadapter/di"
 )
@@ -24,7 +22,7 @@ func (c *ExecController) Handle(ref string, commandArgs []string) error {
 	case gitHubBlobReferenceType:
 		return c.executeBlobSnippet(ref, commandArgs)
 	default:
-		return errors.New("unknown reference type")
+		return &unknownReferenceTypeError{}
 	}
 }
 

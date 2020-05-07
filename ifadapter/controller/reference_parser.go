@@ -1,11 +1,15 @@
 package controller
 
 import (
-	"errors"
 	"strings"
 )
 
 type referenceType int
+
+const (
+	gistURLSegmentCount  = 3
+	gitHubRLSegmentCount = 4
+)
 
 const (
 	unknownReferenceType referenceType = iota
@@ -33,8 +37,8 @@ type gistFileReference struct {
 func parseGistFileReference(ref string) (*gistFileReference, error) {
 	segments := strings.Split(ref, "/")
 
-	if len(segments) != 3 {
-		return nil, errors.New("reference is unexpected syntax")
+	if len(segments) != gistURLSegmentCount {
+		return nil, &unexpectedReferenceError{}
 	}
 
 	refObj := gistFileReference{
@@ -54,8 +58,8 @@ type gitHubBlobReference struct {
 func parseGitHubBlobReference(ref string) (*gitHubBlobReference, error) {
 	segments := strings.SplitN(ref, "/", 4)
 
-	if len(segments) != 4 {
-		return nil, errors.New("reference is unexpected syntax")
+	if len(segments) != gitHubRLSegmentCount {
+		return nil, &unexpectedReferenceError{}
 	}
 
 	refObj := gitHubBlobReference{
