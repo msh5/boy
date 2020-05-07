@@ -1,13 +1,13 @@
 package controller
 
-type unKnownReferenceTypeError struct{}
+type unknownReferenceTypeError struct{}
 
-type unExpectedReferenceError struct{}
+type unexpectedReferenceError struct{}
 
-func (e *unKnownReferenceTypeError) Error() string {
+func (e *unknownReferenceTypeError) Error() string {
 	return "unknown reference type"
 }
 
-func (e *unExpectedReferenceError) Error() string {
+func (e *unexpectedReferenceError) Error() string {
 	return "reference is unexpected syntax"
 }

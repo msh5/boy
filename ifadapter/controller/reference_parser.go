@@ -38,7 +38,7 @@ func parseGistFileReference(ref string) (*gistFileReference, error) {
 	segments := strings.Split(ref, "/")
 
 	if len(segments) != gistURLSegmentCount {
-		return nil, &unExpectedReferenceError{}
+		return nil, &unexpectedReferenceError{}
 	}
 
 	refObj := gistFileReference{
@@ -59,7 +59,7 @@ func parseGitHubBlobReference(ref string) (*gitHubBlobReference, error) {
 	segments := strings.SplitN(ref, "/", 4)
 
 	if len(segments) != gitHubRLSegmentCount {
-		return nil, &unExpectedReferenceError{}
+		return nil, &unexpectedReferenceError{}
 	}
 
 	refObj := gitHubBlobReference{

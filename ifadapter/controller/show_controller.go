@@ -22,7 +22,7 @@ func (c *ShowController) Handle(ref string) error {
 	case gitHubBlobReferenceType:
 		return c.showBlobSnippet(ref)
 	default:
-		return &unKnownReferenceTypeError{}
+		return &unknownReferenceTypeError{}
 	}
 }
 

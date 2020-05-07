@@ -22,7 +22,7 @@ func (c *ExecController) Handle(ref string, commandArgs []string) error {
 	case gitHubBlobReferenceType:
 		return c.executeBlobSnippet(ref, commandArgs)
 	default:
-		return &unKnownReferenceTypeError{}
+		return &unknownReferenceTypeError{}
 	}
 }
 
