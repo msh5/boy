@@ -27,12 +27,18 @@ Hello World !
 
 ## Installation
 
-We distribute pre-built binaries for major CPUs and OSs,
-so it is good to download latest-version binary matched your system:
+### Homebrew
 
-* [Releases · msh5/boy](https://github.com/msh5/boy/releases)
+```console
+brew tap msh5/boy
+brew install boy
+```
 
-If you cannot find the binary matched with your system, please `go get` this repository:
+### Download pre-built binary
+
+[Releases · msh5/boy](https://github.com/msh5/boy/releases)
+
+### Build from source codes
 
 ```console
 env GO111MODULE=off go get -u github.com/msh5/boy
