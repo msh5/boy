@@ -32,9 +32,12 @@ var execCmd = &cobra.Command{
 		config := loadCommandConfig()
 
 		ref := args[0]
-    params := config.toDIContainerBuildParams()
-    params.Ref = ref
-		dependencies := dependency.NewCLIDependencies(params)
+		params := config.toDIContainerBuildParams()
+		params.Ref = ref
+		dependencies, err := dependency.NewCLIDependencies(params)
+		if err != nil {
+			log.Fatal(err)
+		}
 
 		commentArgs := args[1:]
 		if err := dependencies.ExecController.Handle(ref, commentArgs); err != nil {

@@ -22,24 +22,34 @@ type CLIDependencies struct {
 	ShowView *view.ShowConsoleView
 }
 
-func NewCLIDependencies(params CommandDIContainerBuildParameters) *CLIDependencies {
+func NewCLIDependencies(params CommandDIContainerBuildParameters) (*CLIDependencies, error) {
+	gistEntryPersistence, err := persistence.NewGistEntryPersistence(params.GitHubAccessToken, params.Ref)
+	if err != nil {
+		return nil, err
+	}
+
+	gitHubBlobPersistence, err := persistence.NewGitHubBlobPersistence(params.GitHubAccessToken, params.Ref)
+	if err != nil {
+		return nil, err
+	}
+
 	var execViewModel output.ExecViewModel
 	snippetExecInteractor := interactor.NewSnippetExecInteractor(
-		persistence.NewGistEntryPersistence(params.GitHubAccessToken, params.Ref),
+		gistEntryPersistence,
 		output.NewExecOutput(&execViewModel),
 	)
 	blobExecInteractor := interactor.NewBlobExecInteractor(
-		persistence.NewGitHubBlobPersistence(params.GitHubAccessToken, params.Ref),
+		gitHubBlobPersistence,
 		output.NewExecOutput(&execViewModel),
 	)
 
 	var showViewModel output.ShowViewModel
 	snippetShowInteractor := interactor.NewSnippetShowInteractor(
-		persistence.NewGistEntryPersistence(params.GitHubAccessToken, params.Ref),
+		gistEntryPersistence,
 		output.NewShowOutput(&showViewModel),
 	)
 	blobShowInteractor := interactor.NewBlobShowInteractor(
-		persistence.NewGitHubBlobPersistence(params.GitHubAccessToken, params.Ref),
+		gitHubBlobPersistence,
 		output.NewShowOutput(&showViewModel),
 	)
 
@@ -57,5 +67,5 @@ func NewCLIDependencies(params CommandDIContainerBuildParameters) *CLIDependenci
 
 		ExecView: view.NewExecConsoleView(&execViewModel),
 		ShowView: view.NewShowConsoleView(&showViewModel),
-	}
+	}, nil
 }

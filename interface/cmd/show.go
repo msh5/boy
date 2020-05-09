@@ -32,10 +32,13 @@ var showCmd = &cobra.Command{
 		config := loadCommandConfig()
 
 		ref := args[0]
-    params := config.toDIContainerBuildParams()
-    params.Ref = ref
+		params := config.toDIContainerBuildParams()
+		params.Ref = ref
 
-		dependencies := dependency.NewCLIDependencies(params)
+		dependencies, err := dependency.NewCLIDependencies(params)
+		if err != nil {
+			log.Fatal(err)
+		}
 		if err := dependencies.ShowController.Handle(ref); err != nil {
 			log.Fatal(err)
 		}
