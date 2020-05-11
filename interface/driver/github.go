@@ -2,7 +2,6 @@ package driver
 
 import (
 	"context"
-	"net/url"
 
 	"github.com/shurcooL/githubv4"
 	"golang.org/x/oauth2"
@@ -12,26 +11,21 @@ type GitHubClient struct {
 	client *githubv4.Client
 }
 
-func NewGitHubClient(accessToken, ref string) (*GitHubClient, error) {
+func NewGitHubClient(accessToken, url string) *GitHubClient {
 	httpClient := oauth2.NewClient(context.Background(), oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: accessToken},
 	))
 
-	parsedURL, err := url.Parse("http://" + ref)
-	if err != nil {
-		return nil, err
-	}
-
-	switch parsedURL.Host {
-	case "github.com", "gist.github.com":
+	switch url {
+	case "https://api.github.com/graphql":
 		return &GitHubClient{
 			client: githubv4.NewClient(httpClient),
-		}, nil
+		}
 	default:
 		// GitHub Enterprise
 		return &GitHubClient{
-			client: githubv4.NewEnterpriseClient(ref, httpClient),
-		}, nil
+			client: githubv4.NewEnterpriseClient(url, httpClient),
+		}
 	}
 }
 
