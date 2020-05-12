@@ -11,21 +11,23 @@ type GitHubClient struct {
 	client *githubv4.Client
 }
 
-func NewGitHubClient(accessToken, url string) *GitHubClient {
+func NewGitHubClient(accessToken, enterpriseHostname string, isEnterprise bool) *GitHubClient {
 	httpClient := oauth2.NewClient(context.Background(), oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: accessToken},
 	))
 
-	switch url {
-	case "https://api.github.com/graphql":
-		return &GitHubClient{
-			client: githubv4.NewClient(httpClient),
-		}
-	default:
+	if isEnterprise {
 		// GitHub Enterprise
 		return &GitHubClient{
-			client: githubv4.NewEnterpriseClient(url, httpClient),
+			client: githubv4.NewEnterpriseClient(
+				enterpriseHostname,
+				httpClient,
+			),
 		}
+	}
+
+	return &GitHubClient{
+		client: githubv4.NewClient(httpClient),
 	}
 }
 

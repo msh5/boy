@@ -17,11 +17,8 @@ package cmd
 
 import (
 	"log"
-	"net/url"
 
 	"github.com/spf13/cobra"
-
-	"github.com/msh5/boy/interface/dependency"
 )
 
 // showCmd represents the show command
@@ -33,23 +30,11 @@ var showCmd = &cobra.Command{
 		config := loadCommandConfig()
 
 		ref := args[0]
-		params := config.toDIContainerBuildParams()
 
-		parsedURL, err := url.Parse("https://" + ref)
+		dependencies, err := setDependencies(config, ref)
 		if err != nil {
 			log.Fatal(err)
 		}
-
-		switch parsedURL.Host {
-		case "github.com", "gist.github.com":
-			params.URL = "https://api.github.com/graphql"
-		default:
-			// "https://" + host + "/api/graphql"
-			parsedURL.Path = "/api/graphql"
-			params.URL = parsedURL.String()
-		}
-
-		dependencies := dependency.NewCLIDependencies(params)
 
 		if err := dependencies.ShowController.Handle(ref); err != nil {
 			log.Fatal(err)
