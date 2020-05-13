@@ -31,7 +31,7 @@ var execCmd = &cobra.Command{
 
 		ref := args[0]
 
-		dependencies, err := setDependencies(config, ref)
+		dependencies, err := newDependencies(config, ref)
 		if err != nil {
 			log.Fatal(err)
 		}

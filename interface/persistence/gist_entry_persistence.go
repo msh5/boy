@@ -11,10 +11,15 @@ type GistEntryPersistence struct {
 	client *driver.GitHubClient
 }
 
-func NewGistEntryPersistence(accessToken, enterpriseHostname string, isEnterprise bool) *GistEntryPersistence {
-	return &GistEntryPersistence{
-		client: driver.NewGitHubClient(accessToken, enterpriseHostname, isEnterprise),
+func NewGistEntryPersistence(accessToken string, isEnterprise bool, hostname string) (*GistEntryPersistence, error) {
+	githubClient, err := driver.NewGitHubClient(accessToken, isEnterprise, hostname)
+	if err != nil {
+		return nil, err
 	}
+
+	return &GistEntryPersistence{
+		client: githubClient,
+	}, nil
 }
 
 func (r *GistEntryPersistence) Load(userID string, gistEntryName string) (*entity.GistEntry, error) {

@@ -2,33 +2,55 @@ package driver
 
 import (
 	"context"
+	"net/http"
+	"net/url"
 
 	"github.com/shurcooL/githubv4"
 	"golang.org/x/oauth2"
 )
 
+const githubEnterpriseEndpointPath = "/api/graphql"
+
 type GitHubClient struct {
 	client *githubv4.Client
 }
 
-func NewGitHubClient(accessToken, enterpriseHostname string, isEnterprise bool) *GitHubClient {
+func hostnameToEnterpriseEndpoint(hostname string) (*url.URL, error) {
+	endpoint, err := url.Parse("https://" + hostname + githubEnterpriseEndpointPath)
+	if err != nil {
+		return nil, err
+	}
+
+	return endpoint, nil
+}
+
+func NewGithubEnterpriseClient(hostname string, httpClient *http.Client) (*GitHubClient, error) {
+	enterpriseEndpoint, err := hostnameToEnterpriseEndpoint(hostname)
+	if err != nil {
+		return nil, err
+	}
+
+	return &GitHubClient{
+		client: githubv4.NewEnterpriseClient(
+			enterpriseEndpoint.String(),
+			httpClient,
+		),
+	}, nil
+}
+
+func NewGitHubClient(accessToken string, isEnterprise bool, enterpriseHostname string) (*GitHubClient, error) {
 	httpClient := oauth2.NewClient(context.Background(), oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: accessToken},
 	))
 
 	if isEnterprise {
-		// GitHub Enterprise
-		return &GitHubClient{
-			client: githubv4.NewEnterpriseClient(
-				enterpriseHostname,
-				httpClient,
-			),
-		}
+		githubClient, err := NewGithubEnterpriseClient(enterpriseHostname, httpClient)
+		return githubClient, err
 	}
 
 	return &GitHubClient{
 		client: githubv4.NewClient(httpClient),
-	}
+	}, nil
 }
 
 type UserGistFiles struct {
