@@ -12,37 +12,28 @@ type GitHubClient struct {
 	client *githubv4.Client
 }
 
-func hostnameToEnterpriseEndpoint(hostname string) (string, error) {
-	endpoint, err := url.Parse("https://")
-	if err != nil {
-		return "", err
-	}
-
-	endpoint.Host = hostname
-	endpoint.Path = "/api/graphql"
-
-	return endpoint.String(), nil
-}
-
-func NewGitHubClient(accessToken string, isEnterprise bool, enterpriseHostname string) (*GitHubClient, error) {
+func NewGitHubClient(accessToken string, isEnterprise bool, enterpriseHostname string) *GitHubClient {
 	httpClient := oauth2.NewClient(context.Background(), oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: accessToken},
 	))
 
 	if isEnterprise {
-		endpoint, err := hostnameToEnterpriseEndpoint(enterpriseHostname)
-		if err != nil {
-			return nil, err
-		}
+		endpoint := formatEnterpriseURL(enterpriseHostname)
 
 		return &GitHubClient{
 			client: githubv4.NewEnterpriseClient(endpoint, httpClient),
-		}, nil
+		}
 	}
 
 	return &GitHubClient{
 		client: githubv4.NewClient(httpClient),
-	}, nil
+	}
+}
+
+func formatEnterpriseURL(hostname string) string {
+	endpoint := url.URL{Scheme: "https", Host: hostname, Path: "/api/graphql"}
+
+	return endpoint.String()
 }
 
 type UserGistFiles struct {

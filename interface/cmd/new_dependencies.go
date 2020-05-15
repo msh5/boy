@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	GithubHost = "github.com"
+	GitHubHost = "github.com"
 	GistHost   = "gist.github.com"
 )
 
@@ -18,10 +18,7 @@ func newDependencies(config commandConfig, ref string) (*dependency.CLIDependenc
 		return nil, err
 	}
 
-	dependencies, err := dependency.NewCLIDependencies(params)
-	if err != nil {
-		return nil, err
-	}
+	dependencies := dependency.NewCLIDependencies(params)
 
 	return dependencies, nil
 }
@@ -32,7 +29,7 @@ func setParamsIfEnterprise(params *dependency.CommandDIContainerBuildParameters,
 		return err
 	}
 
-	if parsedURL.Host != GithubHost && parsedURL.Host != GistHost {
+	if parsedURL.Host != GitHubHost && parsedURL.Host != GistHost {
 		params.EnterpriseHostname = parsedURL.Hostname()
 		params.IsEnterprise = true
 	}

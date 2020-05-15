@@ -11,15 +11,10 @@ type GitHubBlobPersistence struct {
 	client *driver.GitHubClient
 }
 
-func NewGitHubBlobPersistence(accessToken string, isEnterprise bool, hostname string) (*GitHubBlobPersistence, error) {
-	githubClient, err := driver.NewGitHubClient(accessToken, isEnterprise, hostname)
-	if err != nil {
-		return nil, err
-	}
-
+func NewGitHubBlobPersistence(accessToken string, isEnterprise bool, enterpriseHostname string) *GitHubBlobPersistence {
 	return &GitHubBlobPersistence{
-		client: githubClient,
-	}, nil
+		client: driver.NewGitHubClient(accessToken, isEnterprise, enterpriseHostname),
+	}
 }
 
 func (r *GitHubBlobPersistence) Load(repoOwner string, repoName string, path string) (*entity.GitHubBlob, error) {
