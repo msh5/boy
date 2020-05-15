@@ -11,9 +11,9 @@ type GitHubBlobPersistence struct {
 	client *driver.GitHubClient
 }
 
-func NewGitHubBlobPersistence(accessToken string) *GitHubBlobPersistence {
+func NewGitHubBlobPersistence(accessToken string, isEnterprise bool, enterpriseHostname string) *GitHubBlobPersistence {
 	return &GitHubBlobPersistence{
-		client: driver.NewGitHubClient(accessToken),
+		client: driver.NewGitHubClient(accessToken, isEnterprise, enterpriseHostname),
 	}
 }
 

@@ -19,8 +19,6 @@ import (
 	"log"
 
 	"github.com/spf13/cobra"
-
-	"github.com/msh5/boy/interface/dependency"
 )
 
 // execCmd represents the exec command
@@ -31,9 +29,13 @@ var execCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		config := loadCommandConfig()
 
-		dependencies := dependency.NewCLIDependencies(config.toDIContainerBuildParams())
-
 		ref := args[0]
+
+		dependencies, err := newDependencies(config, ref)
+		if err != nil {
+			log.Fatal(err)
+		}
+
 		commentArgs := args[1:]
 		if err := dependencies.ExecController.Handle(ref, commentArgs); err != nil {
 			log.Fatal(err)

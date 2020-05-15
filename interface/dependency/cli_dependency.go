@@ -10,7 +10,9 @@ import (
 )
 
 type CommandDIContainerBuildParameters struct {
-	GitHubAccessToken string
+	GitHubAccessToken  string
+	IsEnterprise       bool
+	EnterpriseHostname string
 }
 
 type CLIDependencies struct {
@@ -22,23 +24,35 @@ type CLIDependencies struct {
 }
 
 func NewCLIDependencies(params CommandDIContainerBuildParameters) *CLIDependencies {
+	gistEntryPersistence := persistence.NewGistEntryPersistence(
+		params.GitHubAccessToken,
+		params.IsEnterprise,
+		params.EnterpriseHostname,
+	)
+
+	gitHubBlobPersistence := persistence.NewGitHubBlobPersistence(
+		params.GitHubAccessToken,
+		params.IsEnterprise,
+		params.EnterpriseHostname,
+	)
+
 	var execViewModel output.ExecViewModel
 	snippetExecInteractor := interactor.NewSnippetExecInteractor(
-		persistence.NewGistEntryPersistence(params.GitHubAccessToken),
+		gistEntryPersistence,
 		output.NewExecOutput(&execViewModel),
 	)
 	blobExecInteractor := interactor.NewBlobExecInteractor(
-		persistence.NewGitHubBlobPersistence(params.GitHubAccessToken),
+		gitHubBlobPersistence,
 		output.NewExecOutput(&execViewModel),
 	)
 
 	var showViewModel output.ShowViewModel
 	snippetShowInteractor := interactor.NewSnippetShowInteractor(
-		persistence.NewGistEntryPersistence(params.GitHubAccessToken),
+		gistEntryPersistence,
 		output.NewShowOutput(&showViewModel),
 	)
 	blobShowInteractor := interactor.NewBlobShowInteractor(
-		persistence.NewGitHubBlobPersistence(params.GitHubAccessToken),
+		gitHubBlobPersistence,
 		output.NewShowOutput(&showViewModel),
 	)
 
