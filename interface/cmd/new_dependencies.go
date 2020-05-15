@@ -7,8 +7,8 @@ import (
 )
 
 const (
-	GitHubHost = "github.com"
-	GistHost   = "gist.github.com"
+	gitHubHost = "github.com"
+	gistHost   = "gist.github.com"
 )
 
 func newDependencies(config commandConfig, ref string) (*dependency.CLIDependencies, error) {
@@ -29,7 +29,7 @@ func setParamsIfEnterprise(params *dependency.CommandDIContainerBuildParameters,
 		return err
 	}
 
-	if parsedURL.Host != GitHubHost && parsedURL.Host != GistHost {
+	if parsedURL.Host != gitHubHost && parsedURL.Host != gistHost {
 		params.EnterpriseHostname = parsedURL.Hostname()
 		params.IsEnterprise = true
 	}
