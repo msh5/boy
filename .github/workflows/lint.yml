@@ -1,4 +1,4 @@
-name: CI
+name: Lint
 
 on:
   push:
@@ -21,5 +21,5 @@ jobs:
         curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s v1.26.0
         sudo mv ./bin/golangci-lint $GOPATH/bin/
 
-    - name: lint
+    - name: Lint
       run: golangci-lint run
